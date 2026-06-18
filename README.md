@@ -9,6 +9,10 @@ Reference implementation of CHIME-MIL with **GenBio-PathFM** features for
 **Headline result:** mc_sa @ (256+392) flat-fuse — **AUC 0.8434**
 (5-fold LOSO mean), beating the UNI Top-4 ensemble baseline at AUC 0.8346.
 
+![CHIME-MIL architecture](architecture.png)
+
+*Overview of CHIME-MIL: per-slide patches -> frozen GenBio-PathFM features -> site-conditional mean-centering, then hierarchical patch / region / graph branches with gated fusion and auditable attention; trained 5-fold leave-one-site-out across Sites A-E.*
+
 ## Table of contents
 
 - [Setup](#setup)
