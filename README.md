@@ -1,5 +1,7 @@
 # CHIME-MIL (GenBio): Cross-Hospital Robust Tumor-vs-Normal WSI Classification
 
+[![GitHub repo](https://img.shields.io/badge/GitHub-CHIME--MIL-181717?logo=github)](https://github.com/VanchhayNheng/CHIME-MIL) [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/VanchhayNheng/CHIME-MIL/blob/main/LICENSE)
+
 Reference implementation of CHIME-MIL with **GenBio-PathFM** features for
 5-fold leave-one-site-out (LOSO) tumor-vs-normal classification across
 **5,036 whole-slide images from five hospitals**.
