@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+title: "CHIME-MIL: Cross-Hospital Robust Tumor-vs-Normal WSI Classification with GenBio-PathFM Features"
+message: "If you use this code, please cite our paper."
+authors:
+  - family-names: "Nheng"
+    given-names: "Vanchhay"
+    affiliation: "Inje University, Republic of Korea"
+    email: "nhengvanchhay@oasis.inje.ac.kr"
+license: MIT
+repository-code: "https://github.com/VanchhayNheng/CHIME-MIL-genbio"
+preferred-citation:
+  type: article
+  title: "CHIME-MIL: Cross-Hospital Robust Tumor-vs-Normal WSI Classification with GenBio-PathFM Features"
+  year: 2026
+  authors:
+    - family-names: "Nheng"
+      given-names: "Vanchhay"

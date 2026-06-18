@@ -1,0 +1,53 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+
+# Environments
+.venv/
+venv/
+env/
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+
+# Experiment artifacts (keep summary JSONs only)
+*.pt
+*.pth
+*.ckpt
+checkpoints/
+logs/
+slurm-*.out
+slurm-*.err
+wandb/
+*.h5
+
+# Predictions / large CSVs (keep summary JSON only)
+test_preds*.csv
+val_preds*.csv
+
+# Per-fold subdir contents except result.json — handled via .keep / explicit add
+
+distpool_dro/site_coral_genbio*.npz
+distpool_dro/protoagg/protos_genbio_*.npz
+
+# Backups & stale snapshots (editor/session/.bak families)
+*.bak
+*.bak.*
+*.bak_*
+*~
+*.orig
+*.preguard.bak
+*.task5bak
+*.prefix_bak
+*.t6prebak
+*stale*bak*
+*.scale256bak
+
+# Loose logs (scattered, not only logs/ dirs)
+*.log

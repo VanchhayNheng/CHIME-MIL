@@ -1,0 +1,147 @@
+# ExtractWSI Configuration File
+# Edit paths here instead of modifying Python files
+
+# ============================================================
+# DATA PATHS
+# ============================================================
+data:
+  # WSI files directory (input)
+  wsi_dir: /path/to/data/dataset5036/
+
+  # Extracted features directory (output)
+  feature_dir: results/rerun/feat392_root
+
+  # CSV metadata files
+  csv_dir: /path/to/data/dataset_csv/
+
+  # Specific CSV files
+  tumor_normal_csv: tumor_vs_normal_dummy_clean.csv
+  completed_ids: /path/to/data/CHIME_MIL/completed_slide_ids.txt
+
+# ============================================================
+# MODEL PATHS
+# ============================================================
+models:
+  # UNI pretrained checkpoint
+  uni_checkpoint: /path/to/data/UNI/assets/ckpts/vit_large_patch16_224.dinov2.uni_mass100k/pytorch_model.bin
+
+  # Alternative checkpoint locations (will try in order)
+  uni_checkpoint_fallback:
+    - UNI_checkpoint.pth
+    - uni_vit_large_patch16_224.bin
+    - ./UNI/pytorch_model.bin
+
+# ============================================================
+# FEATURE EXTRACTION SETTINGS
+# ============================================================
+extraction:
+  # Magnification levels
+  magnifications:
+    - mag: 20
+      patch_size: 256
+      output_name: mag20x
+    # Add 40x if needed:
+    # - mag: 40
+    #   patch_size: 256
+    #   output_name: mag40x
+
+  # Target microns per pixel
+  target_mpp:
+    20: 0.50
+    40: 0.25
+
+  # GPU settings
+  batch_size: 64  # Increase if you have more GPU memory
+
+  # Tissue mask settings
+  tissue_mask:
+    scale_factor: 32      # Downsample factor for thumbnail
+    tissue_threshold: 0.2  # 20% tissue required per patch
+    kernel_size: 3         # Morphological operations kernel
+
+# ============================================================
+# TRAINING SETTINGS (LOSO)
+# ============================================================
+training:
+  # General
+  seed: 42
+  device: cuda  # or 'cpu'
+
+  # Optimization
+  num_epochs: 40   # was 100; empirical max best_epoch across 35 folds was 17
+  patience: 10     # was 20; catches 94% of best_epochs (median=6, p90=12)
+  learning_rate: 5e-5
+  weight_decay: 1e-3
+
+  # Learning rate scheduler
+  lr_scheduler:
+    mode: max
+    factor: 0.5
+    patience: 7
+
+  # Class imbalance handling
+  focal_loss:
+    gamma: 2.0
+
+  # Validation split
+  val_ratio: 0.15
+
+  # DataLoader
+  num_workers: 4
+
+# ============================================================
+# MODEL ARCHITECTURE (CHIME-MIL)
+# ============================================================
+model:
+  # Input/output
+  input_dim: 4608  # GenBio-PathFM CLS
+  num_classes: 2   # Tumor vs Normal
+
+  # Region Aggregator
+  num_regions: 16  # Number of meso-scale regions
+  region_alpha: 0.5  # Spatial weight in clustering
+
+  # Graph Reasoning
+  hidden_dim: 256
+  k_neighbors: 6   # KNN graph edges per node
+  dropout: 0.5
+
+  # Causal intervention
+  causal_loss:
+    warmup_epochs: 0   # was 10; empirically 89% of folds stopped before warmup -> causal never affected selection
+    weight: 0.3        # Lambda for causal loss
+    k_mask: 3          # Number of regions to mask
+
+# ============================================================
+# LOSO CROSS-VALIDATION
+# ============================================================
+loso:
+  # Hospital names (test sites)
+  hospitals:
+    - Site_A
+    - Site_B
+    - Site_C
+    - Site_D
+    - Site_E
+
+  # Output directory template
+  output_template: CHIME_MIL/{model_name}_loso
+
+# ============================================================
+# LOGGING & DEBUGGING
+# ============================================================
+logging:
+  level: INFO  # DEBUG, INFO, WARNING, ERROR
+  save_logs: true
+  log_every_n_epochs: 1
+
+  # Experiment tracking (optional)
+  use_wandb: false
+  wandb_project: chime-mil-loso
+
+# ============================================================
+# REPRODUCIBILITY
+# ============================================================
+reproducibility:
+  deterministic: true
+  benchmark: false  # Set true for speed if not needing exact reproducibility

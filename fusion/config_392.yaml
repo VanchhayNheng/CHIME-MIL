@@ -1,0 +1,75 @@
+# test_392_meancenter — 392-px GenBio-PathFM smoke config.
+data:
+  wsi_dir: /path/to/data/dataset5036/
+  feature_dir: /path/to/data/CHIME_MIL_genbio/test_392_meancenter/feature_root
+  csv_dir: /path/to/data/dataset_csv/
+  tumor_normal_csv: tumor_vs_normal_dummy_clean.csv
+  completed_ids: /path/to/data/CHIME_MIL/completed_slide_ids.txt
+
+models:
+  uni_checkpoint: /path/to/data/UNI/assets/ckpts/vit_large_patch16_224.dinov2.uni_mass100k/pytorch_model.bin
+  uni_checkpoint_fallback:
+    - UNI_checkpoint.pth
+
+extraction:
+  magnifications:
+    - mag: 20
+      patch_size: 392
+      output_name: mag20x
+  target_mpp:
+    20: 0.50
+    40: 0.25
+  batch_size: 32
+  tissue_mask:
+    scale_factor: 32
+    tissue_threshold: 0.2
+    kernel_size: 3
+
+training:
+  seed: 42
+  device: cuda
+  num_epochs: 40
+  patience: 10
+  learning_rate: 5e-5
+  weight_decay: 1e-3
+  lr_scheduler:
+    mode: max
+    factor: 0.5
+    patience: 7
+  focal_loss:
+    gamma: 2.0
+  val_ratio: 0.15
+  num_workers: 4
+
+model:
+  input_dim: 4608
+  num_classes: 2
+  num_regions: 16
+  region_alpha: 0.5
+  hidden_dim: 256
+  k_neighbors: 6
+  dropout: 0.5
+  causal_loss:
+    warmup_epochs: 0
+    weight: 0.3
+    k_mask: 3
+
+loso:
+  hospitals:
+    - Site_A
+    - Site_B
+    - Site_C
+    - Site_D
+    - Site_E
+  output_template: CHIME_MIL/{model_name}_loso
+
+logging:
+  level: INFO
+  save_logs: true
+  log_every_n_epochs: 1
+  use_wandb: false
+  wandb_project: chime-mil-loso
+
+reproducibility:
+  deterministic: true
+  benchmark: false
